@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RoomRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 class Room
@@ -18,6 +19,10 @@ class Room
 
     #[ORM\Column(type: 'boolean')]
     private $onlyForPremiumMembers;
+    public function canBook(User $user): bool
+    {
+        return ($this->getOnlyForPremiumMembers() && $user->getPremiumMember()) || !$this->getOnlyForPremiumMembers();
+    }
 
     public function getId(): ?int
     {
